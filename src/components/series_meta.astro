@@ -1,0 +1,44 @@
+---
+interface Props {
+  title: string;
+  date: string;
+  description: string;
+}
+
+const { title, date, description } = Astro.props;
+---
+
+<div class="series-meta">
+  <div class="meta-row">
+    <h2 class="series-title">{title}</h2>
+    <p class="mono series-date">{date}</p>
+  </div>
+  <p class="series-description">{description}</p>
+</div>
+
+<style>
+  .series-meta {
+    margin-bottom: 2rem;
+  }
+
+  .meta-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .series-title {
+    text-align: left;
+  }
+
+  .series-date {
+    text-align: left;
+  }
+
+  .series-description {
+    text-align: left;
+  }
+</style>
+
+<!-- title, date and description for series page -->

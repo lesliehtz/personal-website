@@ -1,0 +1,101 @@
+---
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/base_layout.astro';
+import aboutImage from '../assets/about.jpg';
+
+const allSeries = await getCollection('series');
+const seriesData = allSeries.map(s => ({
+  title: s.data.title,
+  slug: s.id
+}));
+---
+
+<BaseLayout title="About - Leslie Heintz" series={seriesData}>
+  <div class="about-container">
+    <div class="about-content">
+      <div class="bio-section">
+        <p>Leslie Heintz is a French photographer based in Singapore whose work explores the intersections of landscape, architecture, and everyday life.</p>
+        
+        <p>With over a decade of experience behind the lens, she captures spaces and moments, transforming the ordinary into something evocative. Her photographs span continents, from European cities to remote natural settings, always guided by a sensitivity to light, form, and atmosphere.</p>
+        
+        <p>Leslie is part of the photographers who <a href="https://dontfeellikeposting.online" target="_blank" rel="noopener noreferrer" class="underline">don't feel like posting</a>.</p>
+        
+        <p>In parallel, she works as an engineer focused on reimagining the built environment, bringing the same thoughtful perspective to both technical and artistic disciplines.</p>
+        
+        <div class="photo-credit">
+          <Image src={aboutImage} alt="About photo" class="about-image" />
+          <p class="mono">Photo by Tom Thiercelin
+          <br />
+          <br />
+          Inter font by Rasmus Andersson</p>
+        </div>
+      </div>
+      
+      <div class="features-section">
+        <h2>Features</h2>
+        <p>
+          <a href="https://noicemagazine.com/LESLIE-HEINTZ" target="_blank" rel="noopener noreferrer">Noice Magazine</a> - 2025<br>
+          <a href="https://dontfeellikeposting.online" target="_blank" rel="noopener noreferrer">don't feel like posting</a> - 2025<br>
+          <a href="https://www.ephemere.tokyo/open-calls/open-call-5" target="_blank" rel="noopener noreferrer">Ephemere Tokyo</a> - 2024<br>
+          <a href="https://linktr.ee/spreadthefuture" target="_blank" rel="noopener noreferrer">Spread The Future Podcast</a> - 2022<br>
+          Le Diaph' - 2020
+        </p>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .about-container {
+    max-width: 100%;
+  }
+
+  .about-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 4rem;
+    margin-bottom: 4rem;
+  }
+
+  .bio-section p {
+    margin-bottom: 1.5rem;
+  }
+
+  .bio-section p:last-child {
+    margin-bottom: 0;
+  }
+
+  .features-section h2 {
+    margin-bottom: 1.5rem;
+  }
+
+  .photo-credit {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 2rem;
+  }
+
+  .about-image {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .underline {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 768px) {
+    .about-content {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+    
+    .credits {
+      flex-direction: column;
+      gap: 1rem;
+    }
+  }
+</style>

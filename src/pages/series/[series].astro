@@ -1,0 +1,33 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/base_layout.astro';
+import SeriesMeta from '../../components/series_meta.astro';
+import PhotoGrid from '../../components/photo_grid.astro';
+
+export async function getStaticPaths() {
+  const allSeries = await getCollection('series');
+  return allSeries.map(entry => ({
+    params: { series: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+
+const allSeries = await getCollection('series');
+const seriesData = allSeries.map(s => ({
+  title: s.data.title,
+  slug: s.id
+}));
+---
+
+<BaseLayout title={entry.data.title} series={seriesData}>
+  <SeriesMeta 
+    title={entry.data.title}
+    date={entry.data.date}
+    description={entry.data.description || ''}
+  />
+  <Content />
+  <PhotoGrid />
+</BaseLayout>

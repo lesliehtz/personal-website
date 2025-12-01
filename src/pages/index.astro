@@ -1,11 +1,15 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/base_layout.astro';
+import HomeGrid from '../components/home_grid.astro';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const allSeries = await getCollection('series');
+const seriesData = allSeries.map(s => ({
+  title: s.data.title,
+  slug: s.id
+}));
 ---
 
-<Layout>
-	<Welcome />
-</Layout>
+<BaseLayout title="Leslie Heintz" series={seriesData}>
+  <HomeGrid />
+</BaseLayout>

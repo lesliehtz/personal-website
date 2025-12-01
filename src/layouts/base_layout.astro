@@ -1,0 +1,79 @@
+---
+import Header from '../components/header.astro';
+import SideMenu from '../components/side_menu.astro';
+import Footer from '../components/footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  series?: Array<{ title: string; slug: string }>;
+}
+
+const { title = 'Leslie Heintz', series = [] } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+	</head>
+	<body>
+		<div class="layout">
+			<aside class="sidebar">
+				<Header />
+				<SideMenu series={series} />
+			</aside>
+			<main class="content">
+				<div class="content-wrapper">
+					<slot />
+				</div>
+				<Footer />
+			</main>
+		</div>
+	</body>
+</html>
+
+<style>
+	html,
+	body {
+		margin: 0;
+		width: 100%;
+		height: 100%;
+	}
+
+	.layout {
+        --sidebar-width: 23%;
+		display: grid;
+		grid-template-columns: var(--sidebar-width) 1fr;
+		min-height: 100vh;
+	}
+
+	.sidebar {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: var(--sidebar-width);
+		height: 100vh;
+		padding: 1.7rem;
+		overflow-y: auto;
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+	}
+
+	.content {
+		grid-column: 2;
+		display: flex;
+		flex-direction: column;
+		min-height: 100vh;
+		padding: 2rem;
+	}
+
+	.content-wrapper {
+		flex: 1;
+	}
+</style>
