@@ -1,0 +1,25 @@
+---
+import BaseLayout from './base_layout.astro';
+import SeriesMeta from '../components/series_meta.astro';
+import PhotoGrid from '../components/photo_grid.astro';
+
+interface Props {
+  title: string;
+  date: string;
+  description: string;
+  series: Array<{ title: string; slug: string }>;
+  seriesSlug: string;
+}
+
+const { title, date, description, series, seriesSlug } = Astro.props;
+---
+
+<BaseLayout title={title} series={series}>
+  <SeriesMeta 
+    title={title}
+    date={date}
+    description={description}
+  />
+  <PhotoGrid seriesSlug={seriesSlug} />
+  <slot />
+</BaseLayout>

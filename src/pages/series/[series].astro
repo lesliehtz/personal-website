@@ -1,8 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
-import BaseLayout from '../../layouts/base_layout.astro';
-import SeriesMeta from '../../components/series_meta.astro';
-import PhotoGrid from '../../components/photo_grid.astro';
+import SeriesLayout from '../../layouts/series_layout.astro';
 
 export async function getStaticPaths() {
   const allSeries = await getCollection('series');
@@ -13,7 +11,6 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
-const { Content } = await entry.render();
 
 const allSeries = await getCollection('series');
 const seriesData = allSeries.map(s => ({
@@ -22,12 +19,11 @@ const seriesData = allSeries.map(s => ({
 }));
 ---
 
-<BaseLayout title={entry.data.title} series={seriesData}>
-  <SeriesMeta 
-    title={entry.data.title}
-    date={entry.data.date}
-    description={entry.data.description || ''}
-  />
-  <Content />
-  <PhotoGrid />
-</BaseLayout>
+<SeriesLayout 
+  title={entry.data.title}
+  date={entry.data.date}
+  description={entry.data.description || ''}
+  series={seriesData}
+  seriesSlug={entry.id}
+>
+</SeriesLayout>

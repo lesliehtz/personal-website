@@ -1,17 +1,115 @@
-<!-- photo grid layout for displaying images in series page -->
+---
+import { Image } from 'astro:assets';
 
-<div class="photo-grid">
-  <div class="placeholder"></div>
+interface Props {
+  seriesSlug: string;
+}
+
+const { seriesSlug } = Astro.props;
+
+// Dynamically import all images from the series folder
+const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/series/**/*.{jpeg,jpg,png,gif,webp}');
+
+// Filter images for the current series
+const seriesImages = Object.entries(images)
+  .filter(([path]) => path.includes(`/series/${seriesSlug}/`))
+  .sort(([a], [b]) => a.localeCompare(b));
+
+const loadedImages = await Promise.all(
+  seriesImages.map(async ([path, importFn]) => {
+    const image = await importFn();
+    return { path, image: image.default };
+  })
+);
+
+// Group images into rows: alternating between full-width (1 image) and two-column (2 images)
+// Two-column rows only occur when the first image is portrait-oriented (height > width)
+const rows: Array<typeof loadedImages> = [];
+let i = 0;
+while (i < loadedImages.length) {
+  const currentImage = loadedImages[i].image;
+  const isPortrait = currentImage.height > currentImage.width;
+  
+  if (isPortrait && i + 1 < loadedImages.length) {
+    // Create two-column row with current and next image
+    rows.push([loadedImages[i], loadedImages[i + 1]]);
+    i += 2;
+  } else {
+    // Create single-image row
+    rows.push([loadedImages[i]]);
+    i++;
+  }
+}
+---
+
+<div class="photo-gallery">
+  {rows.map((rowImages, rowIndex) => (
+    <div class={`gallery-row ${rowImages.length === 1 ? 'full-width' : 'two-column'}`}>
+      {rowImages.map(({ image, path }) => (
+        <div class="photo-wrapper" style={rowImages.length === 2 ? `flex: ${image.width / image.height};` : undefined}>
+          <Image 
+            src={image} 
+            alt={path.split('/').pop()?.replace(/\.[^/.]+$/, '') || 'Photo'} 
+            class="photo"
+            loading={rowIndex < 3 ? 'eager' : 'lazy'}
+          />
+        </div>
+      ))}
+    </div>
+  ))}
 </div>
 
 <style>
-  .photo-grid {
+  .photo-gallery {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .gallery-row {
+    width: 100%;
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  .gallery-row.full-width {
+    flex-direction: column;
+  }
+
+  .gallery-row.two-column {
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  .photo-wrapper {
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .full-width .photo-wrapper {
     width: 100%;
   }
 
-  .placeholder {
+  .two-column .photo-wrapper {
+    flex-grow: 1;
+    min-width: 0;
+  }
+
+  .photo {
     width: 100%;
-    height: 400px;
-    background-color: #999;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  @media (max-width: 768px) {
+    .gallery-row.two-column {
+      flex-direction: column;
+    }
+    
+    .two-column .photo-wrapper {
+      width: 100%;
+    }
   }
 </style>
