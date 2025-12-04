@@ -11,7 +11,7 @@ A personal photography portfolio website showcasing my photography work.
 - **Styling**: Plain CSS with custom properties
 - **Fonts**: 
   - Inter
-  - IBM Plex Mono
+  - Inconsolata
 - **Deployment**: TBD
 
 ## 📄 License
