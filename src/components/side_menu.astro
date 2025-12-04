@@ -4,6 +4,7 @@ interface Props {
 }
 
 const { series = [] } = Astro.props;
+const currentPath = Astro.url.pathname;
 ---
 
 <nav class="side-menu">
@@ -12,19 +13,26 @@ const { series = [] } = Astro.props;
     {series.length > 0 && (
       <ul class="series-list">
         {series.map((item) => (
-          <li><a href={`/series/${item.slug}`}>{item.title}</a></li>
+          <li>
+            <a 
+              href={`/series/${item.slug}`}
+              class:list={[{ active: currentPath === `/series/${item.slug}` }]}
+            >
+              {item.title}
+            </a>
+          </li>
         ))}
       </ul>
     )}
   </div>
 
   <div class="menu-section">
-    <a href="/about">About</a>
-  </div>
-
-  <div class="menu-section social">
-    <a href="https://www.are.na/leslie-heintz/index" target="_blank" rel="noopener noreferrer">Are.na</a>
-    <a href="https://pixelfed.social/lesliehtz" target="_blank" rel="noopener noreferrer">Pixelfed</a>
+    <a 
+      href="/about"
+      class:list={[{ active: currentPath === '/about' }]}
+    >
+      About
+    </a>
   </div>
 </nav>
 
@@ -50,10 +58,8 @@ const { series = [] } = Astro.props;
     margin-bottom: 0.25rem;
   }
 
-  .social {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
+  .active {
+    font-weight: 600;
   }
 </style>
 
