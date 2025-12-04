@@ -39,6 +39,17 @@ const { title, date, description } = Astro.props;
   .series-description {
     text-align: left;
   }
+
+  @media (max-width: 768px) {
+    .meta-row {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+
+    .series-date {
+      margin-top: 1rem;
+    }
+  }
 </style>
 
 <!-- title, date and description for series page -->
