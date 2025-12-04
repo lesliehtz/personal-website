@@ -1,17 +1,191 @@
+---
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+
+const allSeries = await getCollection('series');
+
+// Get the first image for each series
+const seriesWithImages = await Promise.all(
+  allSeries.map(async (series) => {
+    const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/series/**/*.{jpeg,jpg,png,gif,webp}');
+    const seriesImageEntries = Object.entries(images).filter(([path]) => 
+      path.includes(`/series/${series.id}/`)
+    );
+    
+    if (seriesImageEntries.length > 0) {
+      const [path, importFn] = seriesImageEntries.sort(([a], [b]) => a.localeCompare(b))[0];
+      const image = await importFn();
+      return {
+        series,
+        image: image.default,
+        path
+      };
+    }
+    return null;
+  })
+);
+
+const validSeries = seriesWithImages.filter(item => item !== null);
+
+// Calculate the total aspect ratio of all images combined
+const totalAspectRatio = validSeries.reduce((sum, item) => {
+  return sum + (item.image.width / item.image.height);
+}, 0);
+
+// Helper to find the best split point for a target ratio
+function getSplitIndex(items: typeof validSeries, targetRatio: number) {
+  let currentRatio = 0;
+  
+  for (let i = 0; i < items.length; i++) {
+    const itemRatio = items[i].image.width / items[i].image.height;
+    
+    if (currentRatio + itemRatio > targetRatio) {
+      const diffWithout = Math.abs(targetRatio - currentRatio);
+      const diffWith = Math.abs(targetRatio - (currentRatio + itemRatio));
+      
+      return diffWith < diffWithout ? i + 1 : i;
+    }
+    currentRatio += itemRatio;
+  }
+  return items.length;
+}
+
+// Split for Row 1 (target is 1/3 of total)
+const targetRow1Ratio = totalAspectRatio / 3;
+const splitIndex1 = getSplitIndex(validSeries, targetRow1Ratio);
+const row1 = validSeries.slice(0, splitIndex1);
+
+// Split for Row 2 & 3 (remaining items, target is 1/2 of remaining)
+const remainingSeries = validSeries.slice(splitIndex1);
+const remainingAspectRatio = remainingSeries.reduce((sum, item) => sum + (item.image.width / item.image.height), 0);
+const targetRow2Ratio = remainingAspectRatio / 2;
+const splitIndex2 = getSplitIndex(remainingSeries, targetRow2Ratio);
+
+const row2 = remainingSeries.slice(0, splitIndex2);
+const row3 = remainingSeries.slice(splitIndex2);
+---
+
 <div class="home-grid">
-  <div class="placeholder"></div>
+  <div class="grid-row">
+    {row1.map(({ series, image }) => (
+      <a 
+        href={`/series/${series.id}`} 
+        class="grid-item"
+        style={`flex: ${image.width / image.height};`}
+      >
+        <Image 
+          src={image} 
+          alt={series.data.title}
+          class="grid-photo"
+          loading="eager"
+        />
+        <div class="hover-overlay">
+          <h2 class="hover-title">{series.data.title}</h2>
+        </div>
+      </a>
+    ))}
+  </div>
+  <div class="grid-row">
+    {row2.map(({ series, image }) => (
+      <a 
+        href={`/series/${series.id}`} 
+        class="grid-item"
+        style={`flex: ${image.width / image.height};`}
+      >
+        <Image 
+          src={image} 
+          alt={series.data.title}
+          class="grid-photo"
+          loading="eager"
+        />
+        <div class="hover-overlay">
+          <h2 class="hover-title">{series.data.title}</h2>
+        </div>
+      </a>
+    ))}
+  </div>
+  <div class="grid-row">
+    {row3.map(({ series, image }) => (
+      <a 
+        href={`/series/${series.id}`} 
+        class="grid-item"
+        style={`flex: ${image.width / image.height};`}
+      >
+        <Image 
+          src={image} 
+          alt={series.data.title}
+          class="grid-photo"
+          loading="eager"
+        />
+        <div class="hover-overlay">
+          <h2 class="hover-title">{series.data.title}</h2>
+        </div>
+      </a>
+    ))}
+  </div>
 </div>
 
 <style>
   .home-grid {
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
   }
 
-  .placeholder {
+  .grid-row {
+    display: flex;
+    gap: 1.2rem;
+    align-items: flex-start;
+  }
+
+  .grid-item {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    cursor: pointer;
+    flex-grow: 1;
+    flex-shrink: 0;
+    min-width: 0;
+  }
+
+  .grid-photo {
     width: 100%;
-    height: 400px;
-    background-color: #999;
+    height: auto;
+    object-fit: contain;
+    display: block;
+    transition: opacity 0.2s ease;
+  }
+
+  .hover-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(133, 133, 133, 0.15);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    z-index: 10;
+  }
+
+  .hover-title {
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    font-size: 2.2rem;
+  }
+
+  .grid-item:hover .hover-overlay {
+    opacity: 1;
+  }
+
+  @media (max-width: 768px) {
+    .grid-row {
+      flex-direction: column;
+    }
   }
 </style>
-
-<!-- photo grid on home page with nav to each series by clicking on a photo-->
