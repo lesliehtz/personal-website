@@ -1,0 +1,49 @@
+---
+import '../styles/global.css';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>404 - Page Not Found</title>
+  </head>
+  <body>
+    <div class="not-found">
+      <p class="mono">404</p>
+      <p class="mono">Oops, nothing here...</p>
+    <p class="mono"><a href="/">Return to civilization ➔</a></p>
+    </div>
+  </body>
+</html>
+
+<style>
+  body {
+    background-color: #ffffff;
+    margin: 0;
+    padding: 0;
+  }
+
+  .not-found {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 2rem;
+    gap: 1rem;
+  }
+
+  .mono {
+    text-align: center;
+    font-size: 1.5rem;
+  }
+
+  a {
+    text-decoration: underline;
+    text-underline-offset: 0.5rem;
+
+  }
+</style>
