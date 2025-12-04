@@ -6,7 +6,7 @@ A personal photography portfolio website showcasing my photography work.
 
 ## 🛠️ Tech Stack
 
-- **Framework**: [Astro](https://astro.build) - Static site generator optimized for content-focused websites
+- **Framework**: [Astro 5.0](https://astro.build) - Static site generator optimized for content-focused websites
 - **Content Management**: Astro Content Collections with markdown frontmatter
 - **Styling**: Plain CSS with custom properties
 - **Fonts**: 
