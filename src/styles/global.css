@@ -8,7 +8,9 @@
 
 html {
   font-size: 16px;
-  background-color: #ffffff;
+  background-color: #fcfcfc;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
@@ -17,7 +19,7 @@ body {
   font-size: 1.2rem;
   line-height: 1.4;
   letter-spacing: -0.015em;
-  color: #222;
+  color: #111;
 }
 
 h1 {
@@ -53,6 +55,7 @@ pre {
 
   a:hover {
     color: #444;
+    font-style: italic;
   }
 
 footer {

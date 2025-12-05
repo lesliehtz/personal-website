@@ -34,6 +34,17 @@ const currentPath = Astro.url.pathname;
       About
     </a>
   </div>
+
+  <div class="menu-section">
+    <a 
+      href="#"
+      class="contact-link"
+      data-user="heintz.leslie"
+      data-domain="gmail.com"
+    >
+      Contact
+    </a>
+  </div>
 </nav>
 
 <style>
@@ -62,6 +73,17 @@ const currentPath = Astro.url.pathname;
     font-weight: 600;
   }
 </style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const contactLink = document.querySelector('.contact-link');
+    if (contactLink) {
+      const user = contactLink.getAttribute('data-user');
+      const domain = contactLink.getAttribute('data-domain');
+      contactLink.setAttribute('href', `mailto:${user}@${domain}`);
+    }
+  });
+</script>
 
 <!-- fixed side menu for navigation -->
 

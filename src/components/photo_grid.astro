@@ -49,9 +49,9 @@ while (i < loadedImages.length) {
         <div class="photo-wrapper" style={rowImages.length === 2 ? `flex: ${image.width / image.height};` : undefined}>
           <Image 
             src={image} 
-            alt={path.split('/').pop()?.replace(/\.[^/.]+$/, '') || 'Photo'} 
+            alt={path.split('/').pop()?.replace(/\.[^/.]+$/, '') || ''} 
             class="photo"
-            loading={rowIndex < 3 ? 'eager' : 'lazy'}
+            loading={rowIndex === 0 ? 'eager' : 'lazy'}
           />
         </div>
       ))}

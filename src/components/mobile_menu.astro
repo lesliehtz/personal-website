@@ -41,6 +41,17 @@ const currentPath = Astro.url.pathname;
         About
       </a>
     </div>
+
+    <div class="menu-section">
+      <a 
+        href="#"
+        class="contact-link"
+        data-user="heintz.leslie"
+        data-domain="gmail.com"
+      >
+        Contact
+      </a>
+    </div>
   </nav>
 </div>
 
@@ -56,6 +67,7 @@ const currentPath = Astro.url.pathname;
     color: #222;
     width: 2rem;
     height: 2rem;
+    flex-shrink: 0;
   }
 
   .hamburger:hover {
@@ -63,6 +75,8 @@ const currentPath = Astro.url.pathname;
   }
 
   .mobile-nav {
+    --mobile-menu-font-size: 1.3rem;
+    --mobile-menu-spacing: 0.5rem;
     display: none;
     position: fixed;
     top: 5rem;
@@ -73,6 +87,7 @@ const currentPath = Astro.url.pathname;
     padding: 1rem;
     z-index: 99;
     text-align: right;
+    font-size: var(--mobile-menu-font-size);
   }
 
   .mobile-nav.open {
@@ -80,21 +95,22 @@ const currentPath = Astro.url.pathname;
   }
 
   .menu-section {
-    margin-bottom: 1.5rem;
+    margin-bottom: 2.5rem;
   }
 
   .menu-label {
-    margin-bottom: 0.5rem;
+    display: block;
+    margin-bottom: var(--mobile-menu-spacing);
   }
 
   .series-list {
     list-style: none;
-    padding-right: 1rem;
+    padding-right: 2rem;
     text-align: right;
   }
 
   .series-list li {
-    margin-bottom: 0.25rem;
+    margin-bottom: var(--mobile-menu-spacing);
   }
 
   .active {
@@ -108,5 +124,15 @@ const currentPath = Astro.url.pathname;
 
   hamburger?.addEventListener('click', () => {
     mobileNav?.classList.toggle('open');
+  });
+
+  // Set up contact email link
+  document.addEventListener('DOMContentLoaded', () => {
+    const contactLink = document.querySelector('.contact-link');
+    if (contactLink) {
+      const user = contactLink.getAttribute('data-user');
+      const domain = contactLink.getAttribute('data-domain');
+      contactLink.setAttribute('href', `mailto:${user}@${domain}`);
+    }
   });
 </script>
