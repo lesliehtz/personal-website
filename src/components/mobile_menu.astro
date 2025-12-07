@@ -8,8 +8,18 @@ const currentPath = Astro.url.pathname;
 ---
 
 <button class="hamburger" aria-label="Menu">
-  <svg width="2rem" height="2rem" viewBox="0 0 24 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0 1.5h24M0 9h24M0 16.5h24" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"/>
+  <svg
+    width="2rem"
+    height="2rem"
+    viewBox="0 0 24 18"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M0 1.5h24M0 9h24M0 16.5h24"
+      stroke="currentColor"
+      stroke-width="2.5"
+      stroke-linecap="square"></path>
   </svg>
 </button>
 
@@ -17,33 +27,34 @@ const currentPath = Astro.url.pathname;
   <nav>
     <div class="menu-section">
       <a href="/" class="menu-label">Series</a>
-      {series.length > 0 && (
-        <ul class="series-list">
-          {series.map((item) => (
-            <li>
-              <a 
-                href={`/series/${item.slug}`}
-                class:list={[{ active: currentPath === `/series/${item.slug}` }]}
-              >
-                {item.title}
-              </a>
-            </li>
-          ))}
-        </ul>
-      )}
+      {
+        series.length > 0 && (
+          <ul class="series-list">
+            {series.map((item) => (
+              <li>
+                <a
+                  href={`/series/${item.slug}`}
+                  class:list={[
+                    { active: currentPath === `/series/${item.slug}` },
+                  ]}
+                >
+                  {item.title}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
     </div>
 
     <div class="menu-section">
-      <a 
-        href="/about"
-        class:list={[{ active: currentPath === '/about' }]}
-      >
+      <a href="/about" class:list={[{ active: currentPath === '/about' }]}>
         About
       </a>
     </div>
 
     <div class="menu-section">
-      <a 
+      <a
         href="#"
         class="contact-link"
         data-user="heintz.leslie"

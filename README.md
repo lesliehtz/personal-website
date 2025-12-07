@@ -9,7 +9,7 @@ A personal photography portfolio website showcasing my photography work.
 - **Framework**: [Astro 5.0](https://astro.build) - Static site generator optimized for content-focused websites
 - **Content Management**: Astro Content Collections with markdown frontmatter
 - **Styling**: Plain CSS with custom properties
-- **Fonts**: 
+- **Fonts**:
   - Inter
   - Inconsolata
 - **Deployment**: TBD

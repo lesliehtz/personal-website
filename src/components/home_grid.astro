@@ -7,42 +7,46 @@ const allSeries = await getCollection('series');
 // Get the first image for each series
 const seriesWithImages = await Promise.all(
   allSeries.map(async (series) => {
-    const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/series/**/*.{jpeg,jpg,png,gif,webp}');
-    const seriesImageEntries = Object.entries(images).filter(([path]) => 
+    const images = import.meta.glob<{ default: ImageMetadata }>(
+      '/src/assets/series/**/*.{jpeg,jpg,png,gif,webp}'
+    );
+    const seriesImageEntries = Object.entries(images).filter(([path]) =>
       path.includes(`/series/${series.id}/`)
     );
-    
+
     if (seriesImageEntries.length > 0) {
-      const [path, importFn] = seriesImageEntries.sort(([a], [b]) => a.localeCompare(b))[0];
+      const [path, importFn] = seriesImageEntries.sort(([a], [b]) =>
+        a.localeCompare(b)
+      )[0];
       const image = await importFn();
       return {
         series,
         image: image.default,
-        path
+        path,
       };
     }
     return null;
   })
 );
 
-const validSeries = seriesWithImages.filter(item => item !== null);
+const validSeries = seriesWithImages.filter((item) => item !== null);
 
 // Calculate the total aspect ratio of all images combined
 const totalAspectRatio = validSeries.reduce((sum, item) => {
-  return sum + (item.image.width / item.image.height);
+  return sum + item.image.width / item.image.height;
 }, 0);
 
 // Helper to find the best split point for a target ratio
 function getSplitIndex(items: typeof validSeries, targetRatio: number) {
   let currentRatio = 0;
-  
+
   for (let i = 0; i < items.length; i++) {
     const itemRatio = items[i].image.width / items[i].image.height;
-    
+
     if (currentRatio + itemRatio > targetRatio) {
       const diffWithout = Math.abs(targetRatio - currentRatio);
       const diffWith = Math.abs(targetRatio - (currentRatio + itemRatio));
-      
+
       return diffWith < diffWithout ? i + 1 : i;
     }
     currentRatio += itemRatio;
@@ -57,7 +61,10 @@ const row1 = validSeries.slice(0, splitIndex1);
 
 // Split for Row 2 & 3 (remaining items, target is 1/2 of remaining)
 const remainingSeries = validSeries.slice(splitIndex1);
-const remainingAspectRatio = remainingSeries.reduce((sum, item) => sum + (item.image.width / item.image.height), 0);
+const remainingAspectRatio = remainingSeries.reduce(
+  (sum, item) => sum + item.image.width / item.image.height,
+  0
+);
 const targetRow2Ratio = remainingAspectRatio / 2;
 const splitIndex2 = getSplitIndex(remainingSeries, targetRow2Ratio);
 
@@ -67,70 +74,76 @@ const row3 = remainingSeries.slice(splitIndex2);
 
 <div class="home-grid">
   <div class="grid-row">
-    {row1.map(({ series, image }) => (
-      <a 
-        href={`/series/${series.id}`} 
-        class="grid-item"
-        style={`flex: ${image.width / image.height};`}
-      >
-        <Image 
-          src={image} 
-          alt={series.data.title}
-          class="grid-photo"
-          loading="eager"
-          quality={85}
-          widths={[640, 1024, 1536, 2048]}
-          sizes="(max-width: 768px) 100vw, 33vw"
-        />
-        <div class="hover-overlay">
-          <h2 class="hover-title">{series.data.title}</h2>
-        </div>
-      </a>
-    ))}
+    {
+      row1.map(({ series, image }) => (
+        <a
+          href={`/series/${series.id}`}
+          class="grid-item"
+          style={`flex: ${image.width / image.height};`}
+        >
+          <Image
+            src={image}
+            alt={series.data.title}
+            class="grid-photo"
+            loading="eager"
+            quality={85}
+            widths={[640, 1024, 1536, 2048]}
+            sizes="(max-width: 768px) 100vw, 33vw"
+          />
+          <div class="hover-overlay">
+            <h2 class="hover-title">{series.data.title}</h2>
+          </div>
+        </a>
+      ))
+    }
   </div>
   <div class="grid-row">
-    {row2.map(({ series, image }) => (
-      <a 
-        href={`/series/${series.id}`} 
-        class="grid-item"
-        style={`flex: ${image.width / image.height};`}
-      >
-        <Image 
-          src={image} 
-          alt={series.data.title}
-          class="grid-photo"
-          loading="eager"
-          quality={85}
-          widths={[640, 1024, 1536, 2048]}
-          sizes="(max-width: 768px) 100vw, 33vw"
-        />
-        <div class="hover-overlay">
-          <h2 class="hover-title">{series.data.title}</h2>
-        </div>
-      </a>
-    ))}
+    {
+      row2.map(({ series, image }) => (
+        <a
+          href={`/series/${series.id}`}
+          class="grid-item"
+          style={`flex: ${image.width / image.height};`}
+        >
+          <Image
+            src={image}
+            alt={series.data.title}
+            class="grid-photo"
+            loading="eager"
+            quality={85}
+            widths={[640, 1024, 1536, 2048]}
+            sizes="(max-width: 768px) 100vw, 33vw"
+          />
+          <div class="hover-overlay">
+            <h2 class="hover-title">{series.data.title}</h2>
+          </div>
+        </a>
+      ))
+    }
   </div>
   <div class="grid-row">
-    {row3.map(({ series, image }) => (
-      <a 
-        href={`/series/${series.id}`} 
-        class="grid-item"
-        style={`flex: ${image.width / image.height};`}
-      >
-        <Image 
-          src={image} 
-          alt={series.data.title}
-          class="grid-photo"
-          loading="eager"
-          quality={85}
-          widths={[640, 1024, 1536, 2048]}
-          sizes="(max-width: 768px) 100vw, 33vw"
-        />
-        <div class="hover-overlay">
-          <h2 class="hover-title">{series.data.title}</h2>
-        </div>
-      </a>
-    ))}
+    {
+      row3.map(({ series, image }) => (
+        <a
+          href={`/series/${series.id}`}
+          class="grid-item"
+          style={`flex: ${image.width / image.height};`}
+        >
+          <Image
+            src={image}
+            alt={series.data.title}
+            class="grid-photo"
+            loading="eager"
+            quality={85}
+            widths={[640, 1024, 1536, 2048]}
+            sizes="(max-width: 768px) 100vw, 33vw"
+          />
+          <div class="hover-overlay">
+            <h2 class="hover-title">{series.data.title}</h2>
+          </div>
+        </a>
+      ))
+    }
   </div>
 </div>
 
@@ -186,6 +199,7 @@ const row3 = remainingSeries.slice(splitIndex2);
     text-align: center;
     padding: 1rem;
     font-size: 2.2rem;
+    font-style: normal;
   }
 
   .grid-item:hover .hover-overlay {

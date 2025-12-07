@@ -10,33 +10,34 @@ const currentPath = Astro.url.pathname;
 <nav class="side-menu">
   <div class="menu-section">
     <a href="/" class="menu-label">Series</a>
-    {series.length > 0 && (
-      <ul class="series-list">
-        {series.map((item) => (
-          <li>
-            <a 
-              href={`/series/${item.slug}`}
-              class:list={[{ active: currentPath === `/series/${item.slug}` }]}
-            >
-              {item.title}
-            </a>
-          </li>
-        ))}
-      </ul>
-    )}
+    {
+      series.length > 0 && (
+        <ul class="series-list">
+          {series.map((item) => (
+            <li>
+              <a
+                href={`/series/${item.slug}`}
+                class:list={[
+                  { active: currentPath === `/series/${item.slug}` },
+                ]}
+              >
+                {item.title}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )
+    }
   </div>
 
   <div class="menu-section">
-    <a 
-      href="/about"
-      class:list={[{ active: currentPath === '/about' }]}
-    >
+    <a href="/about" class:list={[{ active: currentPath === '/about' }]}>
       About
     </a>
   </div>
 
   <div class="menu-section">
-    <a 
+    <a
       href="#"
       class="contact-link"
       data-user="heintz.leslie"
@@ -86,4 +87,3 @@ const currentPath = Astro.url.pathname;
 </script>
 
 <!-- fixed side menu for navigation -->
-

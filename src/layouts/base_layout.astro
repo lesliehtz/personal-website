@@ -5,118 +5,137 @@ import MobileMenu from '../components/mobile_menu.astro';
 import Footer from '../components/footer.astro';
 import '../styles/global.css';
 
-interface Props {
-  title?: string;
-  series?: Array<{ title: string; slug: string }>;
-}
-
-const { title = 'Leslie Heintz', series = [] } = Astro.props;
+const { title = 'Leslie Heintz', description, series = [] } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="theme-color" content="#ffffff" />
-		<link rel="icon" href="/favicon/favicon.svg" type="image/svg+xml" />
-		<link rel="alternate icon" href="/favicon/favicon-32x32.png" type="image/png" sizes="32x32" />
-		<link rel="apple-touch-icon" href="/favicon/apple-touch-icon.png" sizes="180x180" />
-		<link rel="manifest" href="/favicon/site.webmanifest" />
-		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
-	</head>
-	<body>
-		<div class="mobile-header">
-			<Header />
-			<MobileMenu series={series} />
-		</div>
-		<div class="layout">
-			<aside class="sidebar">
-				<Header />
-				<SideMenu series={series} />
-			</aside>
-			<main class="content">
-				<div class="content-wrapper">
-					<slot />
-				</div>
-				<Footer />
-			</main>
-		</div>
-	</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta
+      name="description"
+      content={description ||
+        'Leslie Heintz - French photographer based in Singapore'}
+    />
+    <meta property="og:title" content={title} />
+    <meta
+      property="og:description"
+      content={description ||
+        'Leslie Heintz - French photographer based in Singapore'}
+    />
+    <meta property="og:url" content={Astro.url} />
+    <meta property="og:type" content="website" />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#ffffff" />
+    <link rel="icon" href="/favicon/favicon.svg" type="image/svg+xml" />
+    <link
+      rel="alternate icon"
+      href="/favicon/favicon-96x96.png"
+      type="image/png"
+      sizes="96x96"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="/favicon/apple-touch-icon.png"
+      sizes="180x180"
+    />
+    <link rel="manifest" href="/favicon/site.webmanifest" />
+    <link rel="canonical" href={Astro.url} />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <div class="mobile-header">
+      <Header />
+      <MobileMenu series={series} />
+    </div>
+    <div class="layout">
+      <aside class="sidebar">
+        <Header />
+        <SideMenu series={series} />
+      </aside>
+      <main class="content">
+        <div class="content-wrapper">
+          <slot />
+        </div>
+        <Footer />
+      </main>
+    </div>
+  </body>
 </html>
 
 <style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
+  html,
+  body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+  }
 
-	.mobile-header {
-		display: none;
-	}
+  .mobile-header {
+    display: none;
+  }
 
-	.layout {
-        --sidebar-width: 23%;
-		display: grid;
-		grid-template-columns: var(--sidebar-width) 1fr;
-		min-height: 100vh;
-	}
+  .layout {
+    --sidebar-width: 23%;
+    display: grid;
+    grid-template-columns: var(--sidebar-width) 1fr;
+    min-height: 100vh;
+  }
 
-	.sidebar {
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: var(--sidebar-width);
-		height: 100vh;
-		padding: 1.7rem;
-		overflow-y: auto;
-		display: flex;
-		flex-direction: column;
-		gap: 2rem;
-	}
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: var(--sidebar-width);
+    height: 100vh;
+    padding: 1.7rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
 
-	.content {
-		grid-column: 2;
-		display: flex;
-		flex-direction: column;
-		min-height: 100vh;
-		padding: 2rem;
-	}
+  .content {
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 2rem;
+  }
 
-	.content-wrapper {
-		flex: 1;
-	}
+  .content-wrapper {
+    flex: 1;
+  }
 
-	/* Mobile styles */
-	@media (max-width: 768px) {
-		.mobile-header {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			position: fixed;
-			top: 0;
-			left: 0;
-			right: 0;
-			padding: 1rem;
-			background: white;
-			z-index: 100;
-		}
+  /* Mobile styles */
+  @media (max-width: 768px) {
+    .mobile-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 1rem;
+      background: white;
+      z-index: 100;
+    }
 
-		.sidebar {
-			display: none;
-		}
+    .sidebar {
+      display: none;
+    }
 
-		.layout {
-			grid-template-columns: 1fr;
-		}
+    .layout {
+      grid-template-columns: 1fr;
+    }
 
-		.content {
-			grid-column: 1;
-			padding: 1rem;
-			padding-top: 5.5rem; /* Account for fixed header + slight margin */
-		}
-	}
+    .content {
+      grid-column: 1;
+      padding: 1rem;
+      padding-top: 5.5rem; /* Account for fixed header + slight margin */
+    }
+  }
 </style>

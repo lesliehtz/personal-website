@@ -15,11 +15,7 @@ const { title, date, description, series, seriesSlug } = Astro.props;
 ---
 
 <BaseLayout title={title} series={series}>
-  <SeriesMeta 
-    title={title}
-    date={date}
-    description={description}
-  />
+  <SeriesMeta title={title} date={date} description={description} />
   <PhotoGrid seriesSlug={seriesSlug} />
   <slot />
 </BaseLayout>

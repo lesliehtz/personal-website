@@ -4,9 +4,9 @@ import BaseLayout from '../layouts/base_layout.astro';
 import HomeGrid from '../components/home_grid.astro';
 
 const allSeries = await getCollection('series');
-const seriesData = allSeries.map(s => ({
+const seriesData = allSeries.map((s) => ({
   title: s.data.title,
-  slug: s.id
+  slug: s.id,
 }));
 ---
 

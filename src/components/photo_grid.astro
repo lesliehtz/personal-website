@@ -8,7 +8,9 @@ interface Props {
 const { seriesSlug } = Astro.props;
 
 // Dynamically import all images from the series folder
-const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/series/**/*.{jpeg,jpg,png,gif,webp}');
+const images = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/series/**/*.{jpeg,jpg,png,gif,webp}'
+);
 
 // Filter images for the current series
 const seriesImages = Object.entries(images)
@@ -29,7 +31,7 @@ let i = 0;
 while (i < loadedImages.length) {
   const currentImage = loadedImages[i].image;
   const isPortrait = currentImage.height > currentImage.width;
-  
+
   if (isPortrait && i + 1 < loadedImages.length) {
     // Create two-column row with current and next image
     rows.push([loadedImages[i], loadedImages[i + 1]]);
@@ -43,23 +45,39 @@ while (i < loadedImages.length) {
 ---
 
 <div class="photo-gallery">
-  {rows.map((rowImages, rowIndex) => (
-    <div class={`gallery-row ${rowImages.length === 1 ? 'full-width' : 'two-column'}`}>
-      {rowImages.map(({ image, path }) => (
-        <div class="photo-wrapper" style={rowImages.length === 2 ? `flex: ${image.width / image.height};` : undefined}>
-          <Image 
-            src={image} 
-            alt={path.split('/').pop()?.replace(/\.[^/.]+$/, '') || ''} 
-            class="photo"
-            loading={rowIndex < 2 ? 'eager' : 'lazy'}
-            quality={85}
-            widths={[640, 1024, 1536, 2048]}
-            sizes="(max-width: 768px) 100vw, 77vw"
-          />
-        </div>
-      ))}
-    </div>
-  ))}
+  {
+    rows.map((rowImages, rowIndex) => (
+      <div
+        class={`gallery-row ${rowImages.length === 1 ? 'full-width' : 'two-column'}`}
+      >
+        {rowImages.map(({ image, path }) => (
+          <div
+            class="photo-wrapper"
+            style={
+              rowImages.length === 2
+                ? `flex: ${image.width / image.height};`
+                : undefined
+            }
+          >
+            <Image
+              src={image}
+              alt={
+                path
+                  .split('/')
+                  .pop()
+                  ?.replace(/\.[^/.]+$/, '') || ''
+              }
+              class="photo"
+              loading={rowIndex < 2 ? 'eager' : 'lazy'}
+              quality={85}
+              widths={[640, 1024, 1536, 2048]}
+              sizes="(max-width: 768px) 100vw, 77vw"
+            />
+          </div>
+        ))}
+      </div>
+    ))
+  }
 </div>
 
 <style>
@@ -110,7 +128,7 @@ while (i < loadedImages.length) {
     .gallery-row.two-column {
       flex-direction: column;
     }
-    
+
     .two-column .photo-wrapper {
       width: 100%;
     }

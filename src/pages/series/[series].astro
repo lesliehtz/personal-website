@@ -4,7 +4,7 @@ import SeriesLayout from '../../layouts/series_layout.astro';
 
 export async function getStaticPaths() {
   const allSeries = await getCollection('series');
-  return allSeries.map(entry => ({
+  return allSeries.map((entry) => ({
     params: { series: entry.id },
     props: { entry },
   }));
@@ -13,17 +13,16 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 
 const allSeries = await getCollection('series');
-const seriesData = allSeries.map(s => ({
+const seriesData = allSeries.map((s) => ({
   title: s.data.title,
-  slug: s.id
+  slug: s.id,
 }));
 ---
 
-<SeriesLayout 
+<SeriesLayout
   title={entry.data.title}
   date={entry.data.date}
   description={entry.data.description || ''}
   series={seriesData}
   seriesSlug={entry.id}
->
-</SeriesLayout>
+/>
