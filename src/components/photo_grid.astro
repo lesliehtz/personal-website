@@ -51,7 +51,10 @@ while (i < loadedImages.length) {
             src={image} 
             alt={path.split('/').pop()?.replace(/\.[^/.]+$/, '') || ''} 
             class="photo"
-            loading={rowIndex === 0 ? 'eager' : 'lazy'}
+            loading={rowIndex < 2 ? 'eager' : 'lazy'}
+            quality={85}
+            widths={[640, 1024, 1536, 2048]}
+            sizes="(max-width: 768px) 100vw, 77vw"
           />
         </div>
       ))}

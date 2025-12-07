@@ -24,7 +24,15 @@ const seriesData = allSeries.map(s => ({
         <p>In parallel, she works as an engineer focused on reimagining the built environment, bringing the same thoughtful perspective to both technical and artistic disciplines.</p>
         
         <div class="photo-credit">
-          <Image src={aboutImage} alt="Leslie Heintz portrait" class="about-image" loading="eager" />
+          <Image 
+            src={aboutImage} 
+            alt="Leslie Heintz portrait" 
+            class="about-image" 
+            loading="eager"
+            quality={85}
+            widths={[480, 768, 1024, 1536]}
+            sizes="(max-width: 768px) 100vw, 50vw"
+          />
           <p class="mono">Photo by Tom Thiercelin</p>
         </div>
       </div>
