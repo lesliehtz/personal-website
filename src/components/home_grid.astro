@@ -2,8 +2,8 @@
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 
-const ROW1_RATIO = 1 / 3; // First row takes 1/3 of total aspect ratio
-const ROW2_RATIO = 1 / 2; // Second row takes 1/2 of remaining aspect ratio
+const ROW1_RATIO = 1 / 3;
+const ROW2_RATIO = 1 / 2;
 
 const allSeries = await getCollection('series');
 
