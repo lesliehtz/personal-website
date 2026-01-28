@@ -9,12 +9,20 @@ interface Props {
   description: string;
   series: Array<{ title: string; slug: string }>;
   seriesSlug: string;
+  image?: string;
 }
 
-const { title, date, description, series, seriesSlug } = Astro.props;
+const { title, date, description, series, seriesSlug, image } = Astro.props;
 ---
 
-<BaseLayout title={title} series={series}>
+<BaseLayout 
+  title={title} 
+  description={description}
+  image={image}
+  type="article"
+  publishedTime={date}
+  series={series}
+>
   <SeriesMeta title={title} date={date} description={description} />
   <PhotoGrid seriesSlug={seriesSlug} />
   <slot />
