@@ -6,6 +6,7 @@ const ROW1_RATIO = 1 / 3;
 const ROW2_RATIO = 1 / 2;
 
 const allSeries = await getCollection('series');
+const base = import.meta.env.BASE_URL;
 
 // Get the first image for each series
 const seriesWithImages = await Promise.all(
@@ -80,7 +81,7 @@ const row3 = remainingSeries.slice(splitIndex2);
     {
       row1.map(({ series, image }) => (
         <a
-          href={`/series/${series.id}`}
+          href={`${base}series/${series.id}`}
           class="grid-item"
           style={`flex: ${image.width / image.height};`}
         >
@@ -104,7 +105,7 @@ const row3 = remainingSeries.slice(splitIndex2);
     {
       row2.map(({ series, image }) => (
         <a
-          href={`/series/${series.id}`}
+          href={`${base}series/${series.id}`}
           class="grid-item"
           style={`flex: ${image.width / image.height};`}
         >
@@ -128,7 +129,7 @@ const row3 = remainingSeries.slice(splitIndex2);
     {
       row3.map(({ series, image }) => (
         <a
-          href={`/series/${series.id}`}
+          href={`${base}series/${series.id}`}
           class="grid-item"
           style={`flex: ${image.width / image.height};`}
         >
