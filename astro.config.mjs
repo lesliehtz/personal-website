@@ -4,6 +4,8 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://lesliehtz.github.io',
+  base: '/personal-website',
   output: 'static',
   compressHTML: true,
   integrations: [
