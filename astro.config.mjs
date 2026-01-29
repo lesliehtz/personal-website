@@ -29,10 +29,4 @@ export default defineConfig({
   prefetch: {
     defaultStrategy: 'hover',
   },
-  
-  vite: {
-    build: {
-      cssMinify: 'lightningcss',
-    },
-  },
 });
