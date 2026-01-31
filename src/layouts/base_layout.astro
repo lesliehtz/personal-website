@@ -6,23 +6,23 @@ import Footer from '../components/footer.astro';
 import SEO from '../components/SEO.astro';
 import '../styles/global.css';
 
-const { 
-  title, 
-  description, 
+const {
+  title,
+  description,
   image,
   imageAlt,
   type,
   publishedTime,
   modifiedTime,
   noindex,
-  series = [] 
+  series = [],
 } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
-    <SEO 
+    <SEO
       title={title}
       description={description}
       image={image}

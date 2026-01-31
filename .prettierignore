@@ -1,6 +1,27 @@
+# build output and documentation
 dist/
+astro_docs/
+
+# generated types
 .astro/
+
+# dependencies
 node_modules/
+
+# package lock files
 package-lock.json
 pnpm-lock.yaml
 yarn.lock
+
+# logs
+*.log
+
+# environment variables
+.env*
+
+# macOS-specific files
+.DS_Store
+
+# IDE folders
+.idea/
+.vscode/
