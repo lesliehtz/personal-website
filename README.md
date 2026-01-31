@@ -12,7 +12,7 @@ A personal photography portfolio website showcasing my photography work.
 - **Fonts**:
   - Inter
   - Inconsolata
-- **Deployment**: TBD
+- **Deployment**: GitHub Pages (via GitHub Actions)
 
 ## 📄 License
 
