@@ -16,4 +16,4 @@ A personal photography portfolio website showcasing my photography work.
 
 ## 📄 License
 
-All rights reserved © Leslie Heintz 2025
+All rights reserved © Leslie Heintz 2026
