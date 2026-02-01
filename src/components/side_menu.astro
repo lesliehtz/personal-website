@@ -44,6 +44,15 @@ const base = import.meta.env.BASE_URL.endsWith('/')
 
   <div class="menu-section">
     <a
+      href={`${base}journals`}
+      class:list={[{ active: currentPath === `${base}journals` }]}
+    >
+      Journals
+    </a>
+  </div>
+
+  <div class="menu-section">
+    <a
       href="mailto:"
       class="contact-link"
       data-user="heintz.leslie"
