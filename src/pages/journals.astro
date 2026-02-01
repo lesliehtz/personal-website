@@ -1,0 +1,105 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/base_layout.astro';
+
+const allSeries = await getCollection('series');
+const seriesData = allSeries.map((s) => ({
+  title: s.data.title,
+  slug: s.id,
+}));
+
+// Placeholder journal entries - to be replaced with actual content later
+const journals = [
+  {
+    id: 1,
+    title: "L'internat",
+    date: '2016-2018',
+    heroImage: 'https://img.vsco.co/cdn-cgi/image/width=1600,height=1071/2ca02a/1225429/5c684cad402182430882bfff/vsco5c684cb08c681.jpg',
+    excerpt: 'A visual journey through the vibrant streets of Tokyo.',
+  },
+  {
+    id: 2,
+    title: 'A day in Paris',
+    date: 'Winter 2018',
+    heroImage: 'https://img.vsco.co/cdn-cgi/image/width=1200,height=796/2ca02a/1225429/5b40981f064ac36d0a362ecd/vsco5b40982195762.jpg',
+    excerpt: 'Observations on how natural light transforms architectural spaces.',
+  },
+  {
+    id: 3,
+    title: 'A day at the beach',
+    date: 'Summer 2017',
+    heroImage: 'https://img.vsco.co/cdn-cgi/image/width=1200,height=900/2ca02a/1225429/59f2ed77639e595b00820ed4/vsco59f2ed7beca8c.jpg',
+    excerpt: 'Finding beauty in the everyday moments of urban life.',
+  },
+];
+---
+
+<BaseLayout
+  title="Journals - Leslie Heintz"
+  description="Personal reflections and observations on photography, architecture, and everyday life."
+  series={seriesData}
+>
+  <div>
+    <p style="color: #666; max-width: 600px; margin-bottom: 3rem;">
+      A visual journal of places and moments from my life.
+    </p>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem;">
+      {
+        journals.map((journal) => (
+          <article class="journal-entry">
+            <a href="#" class="journal-link">
+              <div style="width: 100%; aspect-ratio: 3 / 2; overflow: hidden; background: #f5f5f5;">
+                <img
+                  src={journal.heroImage}
+                  alt={journal.title}
+                  loading="lazy"
+                  style="width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; user-select: none; -webkit-user-drag: none;"
+                />
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 0.5rem; padding-top: 0.5rem;">
+                <h2>{journal.title}</h2>
+                <time class="mono">{journal.date}</time>
+              </div>
+            </a>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .journal-entry {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .journal-link {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .journal-link:hover h2 {
+    color: #444;
+    font-style: italic;
+  }
+
+  .journal-link:hover time {
+    color: #999;
+    font-style: normal;
+  }
+
+  @media (max-width: 768px) {
+    div[style*="grid-template-columns: 1fr 1fr"] {
+      grid-template-columns: 1fr !important;
+      gap: 2.5rem !important;
+    }
+
+    p[style*="margin-bottom: 3rem"] {
+      margin-bottom: 2rem !important;
+    }
+  }
+</style>
