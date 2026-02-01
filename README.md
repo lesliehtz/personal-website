@@ -1,7 +1,5 @@
 # Leslie Heintz Photography Portfolio
 
-> 🚧 **Work in Progress** - This portfolio site is currently under active development.
-
 A personal photography portfolio website showcasing my photography work.
 
 ## 🛠️ Tech Stack
