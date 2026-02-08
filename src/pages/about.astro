@@ -51,7 +51,9 @@ const seriesData = allSeries.map((s) => ({
             widths={[480, 768, 1024, 1536]}
             sizes="(max-width: 768px) 100vw, 50vw"
           />
-          <p class="mono">Photo by Tom Thiercelin</p>
+          <p class="mono">
+            Photo by <a href="https://tomthiercelin.com">Tom Thiercelin</a>
+          </p>
         </div>
       </div>
 
@@ -231,8 +233,8 @@ const seriesData = allSeries.map((s) => ({
 
   .social-icon {
     display: inline-block;
-    vertical-align: middle;
-    margin-right: 0.25rem;
+    vertical-align: baseline;
+    margin-right: 0.2rem;
   }
 
   @media (max-width: 768px) {
