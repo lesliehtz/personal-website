@@ -60,12 +60,7 @@ const base = import.meta.env.BASE_URL.endsWith('/')
     </div>
 
     <div class="menu-section">
-      <a
-        href="mailto:"
-        class="contact-link"
-        data-user="heintz.leslie"
-        data-domain="gmail.com"
-      >
+      <a href="mailto:heintz.leslie@gmail.com" class="contact-link">
         Contact
       </a>
     </div>
@@ -141,15 +136,5 @@ const base = import.meta.env.BASE_URL.endsWith('/')
 
   hamburger?.addEventListener('click', () => {
     mobileNav?.classList.toggle('open');
-  });
-
-  // Set up contact email link
-  document.addEventListener('DOMContentLoaded', () => {
-    const contactLink = document.querySelector('.contact-link');
-    if (contactLink) {
-      const user = contactLink.getAttribute('data-user');
-      const domain = contactLink.getAttribute('data-domain');
-      contactLink.setAttribute('href', `mailto:${user}@${domain}`);
-    }
   });
 </script>
