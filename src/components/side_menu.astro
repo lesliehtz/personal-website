@@ -12,7 +12,6 @@ const base = import.meta.env.BASE_URL.endsWith('/')
 
 <nav class="side-menu">
   <div class="menu-section">
-    <a href={base} class="menu-label">Series</a>
     {
       series.length > 0 && (
         <ul class="series-list">
@@ -64,7 +63,7 @@ const base = import.meta.env.BASE_URL.endsWith('/')
 
   .series-list {
     list-style: none;
-    padding-left: 1rem;
+    padding-left: 0;
   }
 
   .series-list li {
