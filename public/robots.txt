@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://lesliehtz.github.io/personal-website/sitemap-index.xml
+Sitemap: https://leslieheintz.com/sitemap-index.xml
