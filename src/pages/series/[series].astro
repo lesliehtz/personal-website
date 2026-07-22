@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import SeriesLayout from '../../layouts/series_layout.astro';
+import { getSeriesNav } from '../../utils/site';
 
 export async function getStaticPaths() {
   const allSeries = await getCollection('series');
@@ -11,12 +12,7 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
-
-const allSeries = await getCollection('series');
-const seriesData = allSeries.map((s) => ({
-  title: s.data.title,
-  slug: s.id,
-}));
+const seriesData = await getSeriesNav();
 ---
 
 <SeriesLayout

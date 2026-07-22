@@ -4,7 +4,20 @@ import SideMenu from '../components/side_menu.astro';
 import MobileMenu from '../components/mobile_menu.astro';
 import Footer from '../components/footer.astro';
 import SEO from '../components/SEO.astro';
+import type { SeriesLink } from '../utils/site';
 import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  imageAlt?: string;
+  type?: 'website' | 'article';
+  publishedTime?: string;
+  modifiedTime?: string;
+  noindex?: boolean;
+  series?: SeriesLink[];
+}
 
 const {
   title,
@@ -41,11 +54,14 @@ const {
     <script is:inline>
       // Only load analytics on the online website.
       if (window.location.host !== 'leslieheintz.com')
-        window.goatcounter = {no_onload: true}
+        window.goatcounter = { no_onload: true };
     </script>
-    <script is:inline data-goatcounter="https://lesliehtz.goatcounter.com/count" 
-            async src="//gc.zgo.at/count.js">
-    </script>
+    <script
+      is:inline
+      data-goatcounter="https://lesliehtz.goatcounter.com/count"
+      async
+      src="//gc.zgo.at/count.js"
+    ></script>
   </head>
   <body>
     <div class="mobile-header">

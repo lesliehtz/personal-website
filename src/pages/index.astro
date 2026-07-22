@@ -1,13 +1,9 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/base_layout.astro';
 import HomeGrid from '../components/home_grid.astro';
+import { getSeriesNav } from '../utils/site';
 
-const allSeries = await getCollection('series');
-const seriesData = allSeries.map((s) => ({
-  title: s.data.title,
-  slug: s.id,
-}));
+const seriesData = await getSeriesNav();
 ---
 
 <BaseLayout
@@ -15,6 +11,8 @@ const seriesData = allSeries.map((s) => ({
   description="Portfolio of Leslie Heintz, French creative based in Singapore. Exploring architecture, nature and everyday life through photography."
   series={seriesData}
 >
-  <p class="hero-sentence">French creative exploring architecture, nature and everyday life.</p>
+  <p class="hero-sentence">
+    French creative exploring architecture, nature and everyday life.
+  </p>
   <HomeGrid />
 </BaseLayout>

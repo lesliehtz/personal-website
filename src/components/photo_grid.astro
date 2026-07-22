@@ -3,9 +3,10 @@ import { Image } from 'astro:assets';
 
 interface Props {
   seriesSlug: string;
+  seriesTitle: string;
 }
 
-const { seriesSlug } = Astro.props;
+const { seriesSlug, seriesTitle } = Astro.props;
 
 // Dynamically import all images from the series folder
 const images = import.meta.glob<{ default: ImageMetadata }>(
@@ -18,9 +19,13 @@ const seriesImages = Object.entries(images)
   .sort(([a], [b]) => a.localeCompare(b));
 
 const loadedImages = await Promise.all(
-  seriesImages.map(async ([path, importFn]) => {
+  seriesImages.map(async ([path, importFn], index) => {
     const image = await importFn();
-    return { path, image: image.default };
+    return {
+      path,
+      image: image.default,
+      alt: `${seriesTitle} — photograph ${index + 1} of ${seriesImages.length}`,
+    };
   })
 );
 
@@ -50,7 +55,7 @@ while (i < loadedImages.length) {
       <div
         class={`gallery-row ${rowImages.length === 1 ? 'full-width' : 'two-column'}`}
       >
-        {rowImages.map(({ image, path }) => (
+        {rowImages.map(({ image, alt }) => (
           <div
             class="photo-wrapper"
             style={
@@ -61,12 +66,7 @@ while (i < loadedImages.length) {
           >
             <Image
               src={image}
-              alt={
-                path
-                  .split('/')
-                  .pop()
-                  ?.replace(/\.[^/.]+$/, '') || ''
-              }
+              alt={alt}
               class="photo"
               loading={rowIndex < 2 ? 'eager' : 'lazy'}
               quality={85}

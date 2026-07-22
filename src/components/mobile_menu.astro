@@ -1,16 +1,20 @@
 ---
+import { base, type SeriesLink } from '../utils/site';
+
 interface Props {
-  series?: Array<{ title: string; slug: string }>;
+  series?: SeriesLink[];
 }
 
 const { series = [] } = Astro.props;
 const currentPath = Astro.url.pathname;
-const base = import.meta.env.BASE_URL.endsWith('/')
-  ? import.meta.env.BASE_URL
-  : `${import.meta.env.BASE_URL}/`;
 ---
 
-<button class="hamburger" aria-label="Menu">
+<button
+  class="hamburger"
+  aria-label="Menu"
+  aria-expanded="false"
+  aria-controls="mobile-nav"
+>
   <svg
     width="2rem"
     height="2rem"
@@ -26,7 +30,7 @@ const base = import.meta.env.BASE_URL.endsWith('/')
   </svg>
 </button>
 
-<div class="mobile-nav">
+<div class="mobile-nav" id="mobile-nav">
   <nav>
     <div class="menu-section">
       {
@@ -109,11 +113,6 @@ const base = import.meta.env.BASE_URL.endsWith('/')
     margin-bottom: 2.5rem;
   }
 
-  .menu-label {
-    display: block;
-    margin-bottom: var(--mobile-menu-spacing);
-  }
-
   .series-list {
     list-style: none;
     padding-right: 0;
@@ -133,7 +132,25 @@ const base = import.meta.env.BASE_URL.endsWith('/')
   const hamburger = document.querySelector('.hamburger');
   const mobileNav = document.querySelector('.mobile-nav');
 
+  function setOpen(open: boolean) {
+    mobileNav?.classList.toggle('open', open);
+    hamburger?.setAttribute('aria-expanded', String(open));
+  }
+
   hamburger?.addEventListener('click', () => {
-    mobileNav?.classList.toggle('open');
+    setOpen(!mobileNav?.classList.contains('open'));
+  });
+
+  // Close on Escape, and return focus to the button that opened the menu
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && mobileNav?.classList.contains('open')) {
+      setOpen(false);
+      (hamburger as HTMLButtonElement | null)?.focus();
+    }
+  });
+
+  // Close when navigating to one of the links inside the menu
+  mobileNav?.addEventListener('click', (event) => {
+    if ((event.target as HTMLElement).closest('a')) setOpen(false);
   });
 </script>
