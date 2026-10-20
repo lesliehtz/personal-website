@@ -81,19 +81,20 @@ const rows = [row1, row2, row3];
 
 <div class="home-grid">
   {
-    rows.map((row) => (
+    rows.map((row, rowIndex) => (
       <div class="grid-row">
         {row.map(({ series, image }) => (
           <a
             href={`${base}series/${series.id}`}
             class="grid-item"
+            data-reveal
             style={`flex: ${image.width / image.height};`}
           >
             <Image
               src={image}
               alt={series.data.title}
               class="grid-photo"
-              loading="eager"
+              loading={rowIndex === 0 ? 'eager' : 'lazy'}
               quality={85}
               widths={[640, 1024, 1536, 2048]}
               sizes="(max-width: 768px) 100vw, 33vw"
@@ -154,7 +155,7 @@ const rows = [row1, row2, row3];
     justify-content: center;
     background-color: rgba(133, 133, 133, 0.15);
     opacity: 0;
-    transition: opacity 0.2s ease;
+    transition: opacity 0.4s var(--ease-out);
     z-index: 10;
   }
 
@@ -164,6 +165,24 @@ const rows = [row1, row2, row3];
     padding: 1rem;
     font-size: 2.2rem;
     font-style: normal;
+    opacity: 0;
+    translate: 0 4px;
+    transition:
+      opacity 0.4s var(--ease-out),
+      translate 0.4s var(--ease-out);
+  }
+
+  /* Title settles in just after the wash */
+  .grid-item:hover .hover-title {
+    opacity: 1;
+    translate: none;
+    transition-delay: 60ms;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hover-title {
+      translate: none;
+    }
   }
 
   .grid-item:hover .hover-overlay {

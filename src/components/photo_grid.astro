@@ -58,6 +58,7 @@ while (i < loadedImages.length) {
         {rowImages.map(({ image, alt }) => (
           <div
             class="photo-wrapper"
+            data-reveal
             style={
               rowImages.length === 2
                 ? `flex: ${image.width / image.height};`
@@ -68,7 +69,7 @@ while (i < loadedImages.length) {
               src={image}
               alt={alt}
               class="photo"
-              loading={rowIndex < 2 ? 'eager' : 'lazy'}
+              loading={rowIndex === 0 ? 'eager' : 'lazy'}
               quality={85}
               widths={[640, 1024, 1536, 2048]}
               sizes="(max-width: 768px) 100vw, 77vw"
@@ -106,6 +107,11 @@ while (i < loadedImages.length) {
   .photo-wrapper {
     position: relative;
     flex-shrink: 0;
+  }
+
+  /* Let the series text lead before the first photos arrive */
+  .gallery-row:first-child .photo-wrapper {
+    --reveal-offset: 0.25s;
   }
 
   .full-width .photo-wrapper {

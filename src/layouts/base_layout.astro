@@ -52,6 +52,32 @@ const {
       rel="stylesheet"
     />
     <script is:inline>
+      document.documentElement.classList.add('js');
+
+      // Fade photos up once in view and decoded; the wait is capped so nothing feels slow.
+      addEventListener('DOMContentLoaded', () => {
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries
+              .filter((e) => e.isIntersecting)
+              .forEach((e, i) => {
+                io.unobserve(e.target);
+                const decoded = e.target.querySelector('img')?.decode();
+                const timeout = new Promise((r) => setTimeout(r, 800));
+                Promise.race([decoded?.catch(() => {}), timeout]).then(() => {
+                  e.target.style.transitionDelay = `calc(var(--reveal-offset, 0s) + ${Math.min(i, 4) * 60}ms)`;
+                  e.target.classList.add('in');
+                });
+              });
+          },
+          { threshold: 0.1 }
+        );
+        document
+          .querySelectorAll('[data-reveal]')
+          .forEach((el) => io.observe(el));
+      });
+    </script>
+    <script is:inline>
       // Only load analytics on the online website.
       if (window.location.host !== 'leslieheintz.com')
         window.goatcounter = { no_onload: true };
