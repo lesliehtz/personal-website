@@ -108,6 +108,12 @@ const currentPath = Astro.url.pathname;
     .hamburger svg {
       transition: opacity 0.15s;
     }
+
+    .icon-close,
+    .hamburger[aria-expanded='true'] .icon-menu {
+      scale: 1;
+      filter: none;
+    }
   }
 
   .mobile-nav {
@@ -130,7 +136,7 @@ const currentPath = Astro.url.pathname;
     display: block;
   }
 
-  /* Panel fades in, links follow in a quick cascade; closing stays instant */
+  /* Panel fades in, links follow in a quick cascade; closing is faster, as one piece */
   @media (prefers-reduced-motion: no-preference) {
     .mobile-nav.open {
       animation: menu-in 0.2s var(--ease-out);
@@ -139,10 +145,22 @@ const currentPath = Astro.url.pathname;
     .mobile-nav.open :is(li, .menu-section:not(:first-child)) {
       animation: menu-in 0.3s var(--ease-out) calc(var(--i) * 25ms) backwards;
     }
+
+    .mobile-nav.closing {
+      display: block;
+      animation: menu-out 0.15s var(--ease-out) forwards;
+    }
   }
 
   @keyframes menu-in {
     from {
+      opacity: 0;
+      translate: 0 -0.4rem;
+    }
+  }
+
+  @keyframes menu-out {
+    to {
       opacity: 0;
       translate: 0 -0.4rem;
     }
@@ -173,8 +191,13 @@ const currentPath = Astro.url.pathname;
 
   function setOpen(open: boolean) {
     mobileNav?.classList.toggle('open', open);
+    mobileNav?.classList.toggle('closing', !open);
     hamburger?.setAttribute('aria-expanded', String(open));
   }
+
+  mobileNav?.addEventListener('animationend', () => {
+    mobileNav.classList.remove('closing');
+  });
 
   hamburger?.addEventListener('click', () => {
     setOpen(!mobileNav?.classList.contains('open'));
