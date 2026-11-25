@@ -1,5 +1,6 @@
 ---
 import { Image } from 'astro:assets';
+import { getSeriesImages } from '../utils/site';
 
 interface Props {
   seriesSlug: string;
@@ -8,26 +9,11 @@ interface Props {
 
 const { seriesSlug, seriesTitle } = Astro.props;
 
-// Dynamically import all images from the series folder
-const images = import.meta.glob<{ default: ImageMetadata }>(
-  '/src/assets/series/**/*.{jpeg,jpg,png,gif,webp}'
-);
-
-// Filter images for the current series
-const seriesImages = Object.entries(images)
-  .filter(([path]) => path.includes(`/series/${seriesSlug}/`))
-  .sort(([a], [b]) => a.localeCompare(b));
-
-const loadedImages = await Promise.all(
-  seriesImages.map(async ([path, importFn], index) => {
-    const image = await importFn();
-    return {
-      path,
-      image: image.default,
-      alt: `${seriesTitle} — photograph ${index + 1} of ${seriesImages.length}`,
-    };
-  })
-);
+const images = await getSeriesImages(seriesSlug);
+const loadedImages = images.map((image, index) => ({
+  image,
+  alt: `${seriesTitle} — photograph ${index + 1} of ${images.length}`,
+}));
 
 // Group images into rows: alternating between full-width (1 image) and two-column (2 images)
 // Two-column rows only occur when the first image is portrait-oriented (height > width)

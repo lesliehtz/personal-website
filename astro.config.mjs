@@ -16,10 +16,8 @@ export default defineConfig({
   build: {
     inlineStylesheets: 'auto',
   },
-  
+
   image: {
-    domains: [],
-    remotePatterns: [],
     service: {
       entrypoint: 'astro/assets/services/sharp',
       config: {
@@ -27,7 +25,7 @@ export default defineConfig({
       },
     },
   },
-  
+
   prefetch: {
     defaultStrategy: 'hover',
   },

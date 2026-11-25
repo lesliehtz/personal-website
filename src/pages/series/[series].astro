@@ -1,7 +1,8 @@
 ---
 import { getCollection } from 'astro:content';
+import { getImage } from 'astro:assets';
 import SeriesLayout from '../../layouts/series_layout.astro';
-import { getSeriesNav } from '../../utils/site';
+import { getSeriesImages, getSeriesNav } from '../../utils/site';
 
 export async function getStaticPaths() {
   const allSeries = await getCollection('series');
@@ -13,6 +14,12 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 const seriesData = await getSeriesNav();
+
+// The series' first photo becomes its link-preview (Open Graph) image
+const [cover] = await getSeriesImages(entry.id);
+const ogImage = cover
+  ? await getImage({ src: cover, width: 1200, format: 'jpg' })
+  : undefined;
 ---
 
 <SeriesLayout
@@ -21,4 +28,5 @@ const seriesData = await getSeriesNav();
   description={entry.data.description || ''}
   series={seriesData}
   seriesSlug={entry.id}
+  image={ogImage?.src}
 />

@@ -1,56 +1,24 @@
 ---
+import type { ComponentProps } from 'astro/types';
+import Head from '../components/Head.astro';
 import Header from '../components/header.astro';
 import SideMenu from '../components/side_menu.astro';
 import MobileMenu from '../components/mobile_menu.astro';
 import Footer from '../components/footer.astro';
-import SEO from '../components/SEO.astro';
 import type { SeriesLink } from '../utils/site';
 import '../styles/global.css';
 
-interface Props {
-  title?: string;
-  description?: string;
-  image?: string;
-  imageAlt?: string;
-  type?: 'website' | 'article';
-  publishedTime?: string;
-  modifiedTime?: string;
-  noindex?: boolean;
+type Props = ComponentProps<typeof Head> & {
   series?: SeriesLink[];
-}
+};
 
-const {
-  title,
-  description,
-  image,
-  imageAlt,
-  type,
-  publishedTime,
-  modifiedTime,
-  noindex,
-  series = [],
-} = Astro.props;
+const { series = [], ...seo } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
-    <SEO
-      title={title}
-      description={description}
-      image={image}
-      imageAlt={imageAlt}
-      type={type}
-      publishedTime={publishedTime}
-      modifiedTime={modifiedTime}
-      noindex={noindex}
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Inconsolata:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
+    <Head {...seo} />
     <script is:inline>
       document.documentElement.classList.add('js');
 
@@ -79,7 +47,8 @@ const {
     </script>
     <script is:inline>
       // Only load analytics on the online website.
-      if (window.location.host !== 'leslieheintz.com')
+      const host = window.location.hostname;
+      if (host !== 'leslieheintz.com' && host !== 'www.leslieheintz.com')
         window.goatcounter = { no_onload: true };
     </script>
     <script
@@ -112,7 +81,6 @@ const {
 <style>
   html,
   body {
-    margin: 0;
     width: 100%;
     height: 100%;
   }
@@ -164,7 +132,7 @@ const {
       left: 0;
       right: 0;
       padding: 1rem;
-      background: white;
+      background: var(--color-bg);
       z-index: 100;
     }
 

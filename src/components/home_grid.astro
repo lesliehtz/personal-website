@@ -1,36 +1,18 @@
 ---
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
-import { base } from '../utils/site';
+import { base, getSeriesImages } from '../utils/site';
 
 const ROW1_RATIO = 1 / 3;
 const ROW2_RATIO = 1 / 2;
 
 const allSeries = await getCollection('series');
 
-const images = import.meta.glob<{ default: ImageMetadata }>(
-  '/src/assets/series/**/*.{jpeg,jpg,png,gif,webp}'
-);
-
-// Get the first image for each series
+// Each series is shown by its first image; series without images are skipped
 const seriesWithImages = await Promise.all(
   allSeries.map(async (series) => {
-    const seriesImageEntries = Object.entries(images).filter(([path]) =>
-      path.includes(`/series/${series.id}/`)
-    );
-
-    if (seriesImageEntries.length > 0) {
-      const [path, importFn] = seriesImageEntries.sort(([a], [b]) =>
-        a.localeCompare(b)
-      )[0];
-      const image = await importFn();
-      return {
-        series,
-        image: image.default,
-        path,
-      };
-    }
-    return null;
+    const [image] = await getSeriesImages(series.id);
+    return image ? { series, image } : null;
   })
 );
 

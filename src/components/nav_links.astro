@@ -1,0 +1,65 @@
+---
+import { base, contactEmail, type SeriesLink } from '../utils/site';
+
+interface Props {
+  series: SeriesLink[];
+  /** Give each item a --i index so the mobile menu can stagger them in */
+  stagger?: boolean;
+}
+
+const { series, stagger = false } = Astro.props;
+// Built pages get a trailing slash (/series/japan/), the links don't
+const currentPath = Astro.url.pathname.replace(/(.)\/$/, '$1');
+
+const seriesHref = (slug: string) => `${base}series/${slug}`;
+const aboutHref = `${base}about`;
+const index = (i: number) => (stagger ? `--i: ${i}` : undefined);
+---
+
+<div class="menu-section">
+  {
+    series.length > 0 && (
+      <ul class="series-list">
+        {series.map((item, i) => (
+          <li style={index(i)}>
+            <a
+              href={seriesHref(item.slug)}
+              class:list={{ active: currentPath === seriesHref(item.slug) }}
+            >
+              {item.title}
+            </a>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</div>
+
+<div class="menu-section" style={index(series.length)}>
+  <a href={aboutHref} class:list={{ active: currentPath === aboutHref }}>
+    About
+  </a>
+</div>
+
+<div class="menu-section" style={index(series.length + 1)}>
+  <a href={`mailto:${contactEmail}`} class="contact-link">Contact</a>
+</div>
+
+<style>
+  /* Spacing is set by the menu using these links */
+  .menu-section {
+    margin-bottom: var(--menu-section-gap, 1.5rem);
+  }
+
+  .series-list {
+    list-style: none;
+  }
+
+  .series-list li {
+    margin-bottom: var(--menu-item-gap, 0.25rem);
+  }
+
+  .active {
+    font-weight: 600;
+  }
+</style>

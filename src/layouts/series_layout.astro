@@ -20,6 +20,7 @@ const { title, date, description, series, seriesSlug, image } = Astro.props;
   title={title}
   description={description}
   image={image}
+  imageAlt={image ? `${title} by Leslie Heintz` : undefined}
   type="article"
   publishedTime={date}
   series={series}

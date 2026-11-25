@@ -1,12 +1,12 @@
 ---
-import { base, type SeriesLink } from '../utils/site';
+import NavLinks from './nav_links.astro';
+import type { SeriesLink } from '../utils/site';
 
 interface Props {
   series?: SeriesLink[];
 }
 
 const { series = [] } = Astro.props;
-const currentPath = Astro.url.pathname;
 ---
 
 <button
@@ -25,41 +25,7 @@ const currentPath = Astro.url.pathname;
 
 <div class="mobile-nav" id="mobile-nav">
   <nav>
-    <div class="menu-section">
-      {
-        series.length > 0 && (
-          <ul class="series-list">
-            {series.map((item, i) => (
-              <li style={`--i: ${i}`}>
-                <a
-                  href={`${base}series/${item.slug}`}
-                  class:list={[
-                    { active: currentPath === `${base}series/${item.slug}` },
-                  ]}
-                >
-                  {item.title}
-                </a>
-              </li>
-            ))}
-          </ul>
-        )
-      }
-    </div>
-
-    <div class="menu-section" style={`--i: ${series.length}`}>
-      <a
-        href={`${base}about`}
-        class:list={[{ active: currentPath === `${base}about` }]}
-      >
-        About
-      </a>
-    </div>
-
-    <div class="menu-section" style={`--i: ${series.length + 1}`}>
-      <a href="mailto:heintz.leslie@gmail.com" class="contact-link">
-        Contact
-      </a>
-    </div>
+    <NavLinks series={series} stagger />
   </nav>
 </div>
 
@@ -71,14 +37,14 @@ const currentPath = Astro.url.pathname;
     padding: 0;
     display: grid;
     place-items: center;
-    color: #222;
+    color: var(--color-text);
     width: 2rem;
     height: 2rem;
     flex-shrink: 0;
   }
 
   .hamburger:hover {
-    color: #444;
+    color: var(--color-hover);
   }
 
   /* Scale + blur icon swap, after transitions.dev/icon-swap */
@@ -117,19 +83,19 @@ const currentPath = Astro.url.pathname;
   }
 
   .mobile-nav {
-    --mobile-menu-font-size: 1.3rem;
-    --mobile-menu-spacing: 0.5rem;
+    --menu-section-gap: 2.5rem;
+    --menu-item-gap: 0.5rem;
     display: none;
     position: fixed;
     top: 5rem;
     left: 0;
     right: 0;
     bottom: 0;
-    background: white;
+    background: var(--color-bg);
     padding: 1rem;
     z-index: 99;
     text-align: right;
-    font-size: var(--mobile-menu-font-size);
+    font-size: 1.3rem;
   }
 
   .mobile-nav.open {
@@ -142,7 +108,7 @@ const currentPath = Astro.url.pathname;
       animation: menu-in 0.2s var(--ease-out);
     }
 
-    .mobile-nav.open :is(li, .menu-section:not(:first-child)) {
+    .mobile-nav.open :global(:is(li, .menu-section:not(:first-child))) {
       animation: menu-in 0.3s var(--ease-out) calc(var(--i) * 25ms) backwards;
     }
 
@@ -165,29 +131,11 @@ const currentPath = Astro.url.pathname;
       translate: 0 -0.4rem;
     }
   }
-
-  .menu-section {
-    margin-bottom: 2.5rem;
-  }
-
-  .series-list {
-    list-style: none;
-    padding-right: 0;
-    text-align: right;
-  }
-
-  .series-list li {
-    margin-bottom: var(--mobile-menu-spacing);
-  }
-
-  .active {
-    font-weight: 600;
-  }
 </style>
 
 <script>
-  const hamburger = document.querySelector('.hamburger');
-  const mobileNav = document.querySelector('.mobile-nav');
+  const hamburger = document.querySelector<HTMLButtonElement>('.hamburger');
+  const mobileNav = document.querySelector<HTMLElement>('.mobile-nav');
 
   function setOpen(open: boolean) {
     mobileNav?.classList.toggle('open', open);
@@ -195,8 +143,9 @@ const currentPath = Astro.url.pathname;
     hamburger?.setAttribute('aria-expanded', String(open));
   }
 
-  mobileNav?.addEventListener('animationend', () => {
-    mobileNav.classList.remove('closing');
+  // Only the panel's own close animation; link animations bubble up here too
+  mobileNav?.addEventListener('animationend', (event) => {
+    if (event.target === mobileNav) mobileNav.classList.remove('closing');
   });
 
   hamburger?.addEventListener('click', () => {
@@ -207,7 +156,7 @@ const currentPath = Astro.url.pathname;
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape' && mobileNav?.classList.contains('open')) {
       setOpen(false);
-      (hamburger as HTMLButtonElement | null)?.focus();
+      hamburger?.focus();
     }
   });
 
